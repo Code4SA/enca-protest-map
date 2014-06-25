@@ -10,12 +10,51 @@ body {
 .protest-dot:hover {
   transform: scale(10);
 }
+.violent {
+  fill: #cf1a1f;
+}
 svg,
 g {
-  border: solid 3px red;
   stroke-width: 1.5px;
 }
 circle {
   fill: steelblue;
   fill-opacity: .8;
+}
+.scrubber {
+  fill: #444;
+}
+.extent {
+  fill-opacity: 0.2;
+  fill: steelblue;
+}
+.hidden {
+  display: none;
+}
+#map {
+  width: 800px;
+  height: 600px;
+}
+#visible_date {
+  position: absolute;
+  margin-top: 20px;
+  z-index: 999;
+  margin-left: 50px;
+}
+.bar rect {
+  fill: steelblue;
+  shape-rendering: crispEdges;
+}
+#hover {
+  position: fixed;
+  background-color: #FFF;
+  padding: 10px;
+  border: 1px #CCC solid;
+  opacity: 0.95;
+  top: 0px;
+  left: 0px;
+  width: 500px;
+  font-size: 9pt;
+  z-index: 1000;
+  cursor: pointer;
 }

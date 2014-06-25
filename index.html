@@ -6,131 +6,163 @@
 	<title>Protest Map</title>
 	<link rel="stylesheet" href="css/style.css">
 	
-<link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.css" />
-<!--[if lte IE 8]><link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.ie.css" /><![endif]-->
-
+	<link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.css" />
+	<!--[if lte IE 8]><link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.ie.css" /><![endif]-->
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.flatly.css">
+	
 </head>
-<body onload="initialize()">
-	<div id="map">
-	</div>
-	<div id="visible_date"></div>
+<body>
+	<div class="container">
+		<div class="col-md-12">
+			<h1>Protest Map</h1>
+			<h3>Code4SA and eNCA</h3>
+		<div class="col-md-9">
+			<div id="visible_date"></div>
+			<div id="map">
+			</div>
+
+			
+			<div id="scrubber"></div>
+			<div id="histogram"></div>
+			<div id="hover" class="hidden">
+				<dl class="dl-horizontal">
+					<dt>Date</dt>
+					<dd id="date"></dd>
+					<dt>Municipality</dt>
+					<dd id="Municipality_metro"></dd>
+					<dt>Suburb</dt>
+					<dd id="Suburbareaplacename"></dd>
+					<dt>Town</dt>
+					<dd id="TownCity_Name"></dd>
+					<dt>Street</dt>
+					<dd id="First_Street"></dd>
+					<dt>Violent or non-violent</dt>
+					<dd id="Violent_or_violent"></dd>
+				</dl>
+				<p id="Reasonforprotest"></p>
+			</div>
+		</div>
+		<!-- <div class="col-md-3">
+			<div class="panel-group" id="accordion">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapseVoting">Voting</a>
+						</h4>
+					</div>
+					<div id="collapseVoting" class="panel-collapse collapse">
+						<div class="panel-body">
+							<iframe id="wazi-embed-voting" class="census-reporter-embed" frameborder="0" width="0" height="0" style="margin: 1em; max-width: 720px;"></iframe>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapseWater">
+								Water
+							</a>
+						</h4>
+					</div>
+					<div id="collapseWater" class="panel-collapse collapse">
+						<div class="panel-body">
+							<iframe id="wazi-embed-water" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapseRefuse">
+								Refuse
+							</a>
+						</h4>
+					</div>
+					<div id="collapseRefuse" class="panel-collapse collapse">
+						<div class="panel-body">
+							<iframe id="wazi-embed-refuse" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapseToilet">
+								Toilet
+							</a>
+						</h4>
+					</div>
+					<div id="collapseToilet" class="panel-collapse collapse">
+						<div class="panel-body">
+							<iframe id="wazi-embed-toilet" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapseEmployment">
+								Employment
+							</a>
+						</h4>
+					</div>
+					<div id="collapseEmployment" class="panel-collapse collapse">
+						<div class="panel-body">
+							<iframe id="wazi-embed-employment" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapseIncome">
+								Income
+							</a>
+						</h4>
+					</div>
+					<div id="collapseIncome" class="panel-collapse collapse">
+						<div class="panel-body">
+							<iframe id="wazi-embed-income" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapseEducation">
+								Education
+							</a>
+						</h4>
+					</div>
+					<div id="collapseEducation" class="panel-collapse collapse">
+						<div class="panel-body">
+							<iframe id="wazi-embed-education" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> -->
+<script src="http://embed.wazimap.co.za/static/js/embed.chart.make.js"></script>
 <script type="text/javascript" src="d3/d3.v3.min.js"></script>
 <script type="text/javascript" src="http://leaflet.cloudmade.com/dist/leaflet.js"></script>
 <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.2.4"></script>
 <script language="javascript" src="javascript/protestmap.js"></script>
+<script src="jquery/jquery-1.11.1.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-function initialize() {
-	var map = L.map("map").setView([-29, 24], 5);
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-	}).addTo(map);
-
-	var sliderpos = 0;
-	var data = [];
-	var date_scale = null;
-	map._initPathRoot();
-	var svg = d3.select("#map").select("svg");
-	var g = svg.append("g");
-	var date_points = 200;
-	
-
-	d3.csv("protestdata.csv")
-		// .row(function(d) { return { }});
-		.get(function(error, rows) {
-			var max_date = 0;
-			var min_date = new Date();
-			// console.log(rows);
-			for(var x = 0; x < rows.length; x++) {
-				var row = rows[x];
-				var start_date = new Date(row.Start_Date);
-				if (start_date > max_date) {
-					max_date = start_date;
-				}
-				if (start_date < min_date) {
-					min_date = start_date;
-				}
-				rows[x].LatLng = new L.LatLng(rows[x].Latitude, rows[x].Longitude);
-				rows[x].date = start_date;
-			}
-
-			var dots = g.selectAll("circle")
-				.data(rows)
-				.enter().append("circle")
-				.attr("r", function (d) { return 20 })
-				.attr("class", "protest-dot hidden");
-				
-				// .style('stroke-opacity', 1e-6)
-				// .style('fill', 'none');
-			function update(date) {
-				var montharray=new Array("January","February","March","April","May","June",
-                            "July","August","September","October","November","December");
-				d3.select("#visible_date")
-					.text(montharray[date.getMonth()] + " " + date.getFullYear());
-				g.selectAll(".hidden")
-					.classed("hidden", function(d) {
-						if (d.date < date) {
-							return false;
-						}
-						return true;
-					})
-					.classed("shown", function(d) {
-
-						if (d.date > date) {
-							return false;
-						}
-						return true;
-					});
-				g.selectAll(".shown")
-					.transition()
-					// .delay(100)
-					.duration(500)
-					// .ease(Math.sqrt)
-					.ease("bounce")
-					.attr('r', 2);
-			}
-
-			function change() {
-				dots.attr("cx",function(d) { return map.latLngToLayerPoint(d.LatLng).x});
-				dots.attr("cy",function(d) { return map.latLngToLayerPoint(d.LatLng).y});
-			}
-			change();
-			update(new Date(0));
-			map.on("viewreset", function() {
-				dots.attr("cx",function(d) { return map.latLngToLayerPoint(d.LatLng).x});
-				dots.attr("cy",function(d) { return map.latLngToLayerPoint(d.LatLng).y});
-			});
-			// map.on()
-			date_scale = d3.time.scale().domain([max_date, min_date]).range([date_points, 0]);
-			data = rows;
-			var count = 0;
-			var interval = setInterval(function() {
-				count++;
-				if (count >= date_points) {
-					window.clearInterval(interval);
-				}
-				update(date_scale.invert(count))
-			}, 120);
-			
-		});
-}
-
+$(".collapse").on('shown.bs.collapse', function(e) {
+	var el = $(e.currentTarget);
+	// console.log(el.child("src"));
+	el.find("iframe").attr("height", "300").attr("width", "100%");
+});
+initialize();
 </script>
-<style type="text/css">
-	.hidden {
-		display: none;
-	}
-
-    #map {
-        width: 800px;
-        height: 600px;
-    }
-
-    #visible_date {
-    	position: fixed;
-    	top: 20px;
-    	left: 50px;
-    }
-    
-</style>
 </body>
 </html>
