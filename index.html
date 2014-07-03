@@ -6,7 +6,7 @@
 	<title>Protest Map</title>
 	<link rel="stylesheet" href="css/style.css">
 	
-	<link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.css" />
+	<link rel="stylesheet" href="leaflet/leaflet.css" />
 	<!--[if lte IE 8]><link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.ie.css" /><![endif]-->
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.flatly.css">
 	
@@ -42,9 +42,10 @@
 				<p id="Reasonforprotest"></p>
 			</div>
 		</div>
-		<!-- <div class="col-md-3">
+		<div class="col-md-3">
+			<h3 id="ward_name"></h3>
 			<div class="panel-group" id="accordion">
-				<div class="panel panel-default">
+				<div class="panel panel-default" id="panel-voting">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseVoting">Voting</a>
@@ -52,12 +53,12 @@
 					</div>
 					<div id="collapseVoting" class="panel-collapse collapse">
 						<div class="panel-body">
-							<iframe id="wazi-embed-voting" class="census-reporter-embed" frameborder="0" width="0" height="0" style="margin: 1em; max-width: 720px;"></iframe>
+							<iframe id="wazi-embed-voting" class="census-reporter-embed" frameborder="0" width="100%" height="600" style="margin: 1em; max-width: 720px;"></iframe>
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default">
+				<div class="panel panel-default" id="panel-water">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseWater">
@@ -67,12 +68,12 @@
 					</div>
 					<div id="collapseWater" class="panel-collapse collapse">
 						<div class="panel-body">
-							<iframe id="wazi-embed-water" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+							<iframe id="wazi-embed-water" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px; overflow-y: scroll"></iframe>
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default">
+				<div class="panel panel-default" id="panel-refuse">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseRefuse">
@@ -82,12 +83,12 @@
 					</div>
 					<div id="collapseRefuse" class="panel-collapse collapse">
 						<div class="panel-body">
-							<iframe id="wazi-embed-refuse" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+							<iframe id="wazi-embed-refuse" class="census-reporter-embed" frameborder="0" width="100%" height="350" style="margin: 1em; max-width: 720px;"></iframe>
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default">
+				<div class="panel panel-default" id="panel-toilet">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseToilet">
@@ -97,12 +98,12 @@
 					</div>
 					<div id="collapseToilet" class="panel-collapse collapse">
 						<div class="panel-body">
-							<iframe id="wazi-embed-toilet" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+							<iframe id="wazi-embed-toilet" class="census-reporter-embed" frameborder="0" width="100%" height="400" style="margin: 1em; max-width: 720px;"></iframe>
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default">
+				<div class="panel panel-default" id="panel-employment">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseEmployment">
@@ -112,12 +113,12 @@
 					</div>
 					<div id="collapseEmployment" class="panel-collapse collapse">
 						<div class="panel-body">
-							<iframe id="wazi-embed-employment" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+							<iframe id="wazi-embed-employment" class="census-reporter-embed" frameborder="0" width="100%" height="350" style="margin: 1em; max-width: 720px;"></iframe>
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default">
+				<div class="panel panel-default" id="panel-income">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseIncome">
@@ -127,12 +128,12 @@
 					</div>
 					<div id="collapseIncome" class="panel-collapse collapse">
 						<div class="panel-body">
-							<iframe id="wazi-embed-income" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+							<iframe id="wazi-embed-income" class="census-reporter-embed" frameborder="0" width="100%" height="780" style="margin: 1em; max-width: 720px;"></iframe>
 						</div>
 					</div>
 				</div>
 
-				<div class="panel panel-default">
+				<div class="panel panel-default" id="panel-education">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 							<a data-toggle="collapse" data-parent="#accordion" href="#collapseEducation">
@@ -142,25 +143,27 @@
 					</div>
 					<div id="collapseEducation" class="panel-collapse collapse">
 						<div class="panel-body">
-							<iframe id="wazi-embed-education" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px;"></iframe>
+							<iframe id="wazi-embed-education" class="census-reporter-embed" frameborder="0" width="100%" height="600" style="margin: 1em; max-width: 720px;"></iframe>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div> -->
+	</div>
+</div>
 <script src="http://embed.wazimap.co.za/static/js/embed.chart.make.js"></script>
 <script type="text/javascript" src="d3/d3.v3.min.js"></script>
-<script type="text/javascript" src="http://leaflet.cloudmade.com/dist/leaflet.js"></script>
+<script type="text/javascript" src="leaflet/leaflet.js"></script>
 <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.2.4"></script>
 <script language="javascript" src="javascript/protestmap.js"></script>
 <script src="jquery/jquery-1.11.1.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
+
 $(".collapse").on('shown.bs.collapse', function(e) {
+	$(".collapse").find("iframe").attr("src", "");
 	var el = $(e.currentTarget);
-	// console.log(el.child("src"));
-	el.find("iframe").attr("height", "300").attr("width", "100%");
+	el.find("iframe").attr("src", el.find("iframe").attr("data-src"));
 });
 initialize();
 </script>

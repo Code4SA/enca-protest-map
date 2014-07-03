@@ -198,7 +198,13 @@ function initialize() {
 						.classed("hidden", true);
 				})
 				.on("click", function(e) {
+					$("#ward_name").html("");
+					$("#accordion").hide();
+					$(".in").collapse('hide');
+					$(".collapse").find("iframe").attr("src", "");
 					d3.json("http://wards.code4sa.org/?database=wards_2011&address=" + e.Latitude + "," + e.Longitude, function(warddata) {
+						// console.log(warddata[0]);
+						$("#ward_name").html("Ward " + warddata[0].wards_no + "<br />" + warddata[0].municipality + "<br />" + warddata[0].province); 
 						var base_url = "http://embed.wazimap.co.za/static/iframe.html?chartType=histogram&chartHeight=200&chartQualifier=&chartTitle=Voters+by+party&initialSort=&statType=scaled-percentage" ;
 						var charts = {
 							voting: {
@@ -213,13 +219,28 @@ function initialize() {
 								chartDataID: "service_delivery-refuse_disposal_distribution",
 								chartTitle: "Population by refuse disposal"
 							},
-							
+							toilet: {
+								chartDataID: "service_delivery-toilet_facilities_distribution",
+								chartTitle: "Population by toilet facilities"
+							},
+							employment: {
+								chartDataID: "economics-employment_status",
+								chartTitle: "Population by employment status"
+							},
+							income: {
+								chartDataID: "economics-individual_income_distribution",
+								chartTitle: "Employees by monthly income"
+							},
+							education: {
+								chartDataID: "education-educational_attainment_distribution",
+								chartTitle: "Population by highest education level"
+							},
 						}
 						for (cid in charts) {
 							var url = base_url + "&geoID=ward-" + warddata[0].ward + "&chartDataID=" + charts[cid].chartDataID + "&chartTitle=" + charts[cid].chartTitle;
-							d3.select("#wazi-embed-" + cid).attr("src", url);	
+							d3.select("#wazi-embed-" + cid).attr("data-src", url);
 						}
-						
+						$("#accordion").show();
 						
 					});
 					// console.log(e);
@@ -256,8 +277,5 @@ function initialize() {
 
 			gBrush.selectAll("rect")
 				.attr("height", 70);
-
-
-			
 		});
 }
