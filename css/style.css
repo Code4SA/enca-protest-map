@@ -7,9 +7,6 @@ body {
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
 }
-.protest-dot:hover {
-  transform: scale(10);
-}
 .violent {
   fill: #cf1a1f;
 }
