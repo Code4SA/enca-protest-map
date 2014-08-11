@@ -13,7 +13,6 @@ function initialize() {
     ]);
 
 	map.on("zoomend", function(e) {
-		
 		g.selectAll(".shown")
 		.attr('r', map._zoom);
 	});
@@ -46,7 +45,16 @@ function initialize() {
 
 	function test(d) {
 		brush_show = (d.date < brush.extent()[1] && d.date > brush.extent()[0]);
-		filter_show = true;
+		type_id = $("#protest_types option:selected").val();
+		if (type_id == 0) {
+			filter_show = true;
+		} else {
+			if (d.type_id == type_id) {
+				filter_show = true;
+			} else {
+				filter_show = false;
+			}
+		}
 		return (brush_show && filter_show);
 	}
 
@@ -162,7 +170,7 @@ function initialize() {
 			var day_count = {};
 
 			var protest_types = [];
-
+			protest_types[0] = "All";
 			for(var x = 0; x < rows.length; x++) {
 				var row = rows[x];
 				var start_date = new Date(row.Start_Date);
@@ -176,26 +184,27 @@ function initialize() {
 				rows[x].date = start_date;
 				(day_count[rows[x].date]) ? day_count[rows[x].date] = day_count[rows[x].date] + 1 : day_count[rows[x].date] = 1;
 
-				protest_types.push(row.type);
+				protest_types[row.type_id] = row.type;
 			}
 
-			protest_types = d3.set(protest_types).values();
-			console.log(protest_types);
 			d3.select("#protest_types")
-				.selectAll("div").data(protest_types).enter()
-				.append("div")
-				.classed("checkbox", true)
-				.append("label").text(function(d) {
-					return d;
+				.append("select")
+				.classed("form-control", true)
+				.selectAll("option")
+				.data(protest_types)
+				.enter()
+				.append("option")
+				.attr("value", function(d, i) {
+					return i;
 				})
-				.append("input")
-				.attr("checked", true)
-    			.attr("type", "checkbox")
-    			.attr("id", function(d,i) { return 'a'+i; })
-    			.on("click", function(t) {
-    				
-    				update()
-    			});
+				.text(
+					function(d) {
+						return d;
+					}
+				)
+
+			d3.select("#protest_types")
+				.on("change", update)
 
 			var dots = g.selectAll("circle")
 				.data(rows)
@@ -205,39 +214,9 @@ function initialize() {
 				.classed("violent", function(d) {
 					return d["violent"] == "1"
 				})
-				.classed("service_delivery", function(d) {
-					return d["type"] == "Service delivery"
-				})
-				.classed("labour", function(d) {
-					return d["type"] == "Labour related"
-				})
-				.classed("vigilantism", function(d) {
-					return d["type"] == "Vigilantism"
-				})
-				.classed("crime", function(d) {
-					return d["type"] == "Crime related"
-				})
-				.classed("education", function(d) {
-					return d["type"] == "Education related"
-				})
-				.classed("transport", function(d) {
-					return d["type"] == "Transport related"
-				})
-				.classed("xenophobia", function(d) {
-					return d["type"] == "Xenophobia"
-				})
-				.classed("political", function(d) {
-					return d["type"] == "Political causes"
-				})
-				.classed("election", function(d) {
-					return d["type"] == "Election related"
-				})
-				.classed("environment", function(d) {
-					return d["type"] == "Environment related"
-				})
-				.classed("individual", function(d) {
-					return d["type"] == "Individual causes"
-				})
+				.attr("data-protest-type", function(d) {
+					return d["type_id"]
+				}) 
 				.on("mouseover", function(e) {
 					var el = 
 					d3.select("#hover")
@@ -247,6 +226,7 @@ function initialize() {
 					else
 						el.select("#date").text(dateformat(new Date(e.Start_Date)) + " to " + dateformat(new Date(e.End_Date)));
 					el.select("#Violent_or_violent").text(e.Violent_or_violent);
+					el.select("#type").text(e.type);
 					el.select("#TownCity_Name").text(e.TownCity_Name);
 					el.select("#Suburbareaplacename").text(e.Suburbareaplacename);
 					el.select("#Reasonforprotest").text(e.Reasonforprotest);
@@ -301,9 +281,7 @@ function initialize() {
 							d3.select("#wazi-embed-" + cid).attr("data-src", url);
 						}
 						$("#accordion").show();
-						
 					});
-					// console.log(e);
 				})
 			;
 			
