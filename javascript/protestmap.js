@@ -44,33 +44,38 @@ function initialize() {
 			.style("width", perc + "%")
 	}
 
+	function test(d) {
+		brush_show = (d.date < brush.extent()[1] && d.date > brush.extent()[0]);
+		filter_show = true;
+		return (brush_show && filter_show);
+	}
+
+	function update() {
+		g.selectAll(".protest-dot")
+			.classed("hidden", function(d) {
+				return (!test(d));
+			})
+			.classed("shown", function(d) {
+				return (test(d));
+			})
+		;
+		g.selectAll(".shown")
+			// .classed("showing", false)
+			// .classed("shown", true)
+			.attr('r', (4 * map._zoom))
+			.transition()
+			.duration(500)
+			.ease("bounce")
+			.attr('r', map._zoom)
+		;
+	}
+
 
 	function brushed() {
 		var montharray=new Array("January","February","March","April","May","June","July","August","September","October","November","December");
 		d3.select("#visible_date")
 			.text(dateformat(brush.extent()[0]) + " - " + dateformat(brush.extent()[1]));
-		g.selectAll(".protest-dot")
-			.classed("hidden", function(d) {
-				if (d.date < brush.extent()[1] && d.date > brush.extent()[0]) {
-					return false;
-				}
-				return true;
-			})
-			.classed("shown", function(d) {
-				if (d.date < brush.extent()[1] && d.date > brush.extent()[0]) {
-					return true;
-				}
-				return false;
-			})
-			;
-		
-		g.selectAll(".shown")
-			.attr('r', (4 * map._zoom))
-			.transition()
-			.duration(500)
-			.ease("bounce")
-			.attr('r', map._zoom);
-		;
+		update();
 	}
 
 	function draw_graph(rows, hsvg) {
@@ -149,12 +154,14 @@ function initialize() {
 			.style("left", (e.originalEvent.clientX -200) + "px");
 	});
 
-	d3.csv("protestdata.csv")
+	d3.csv("protestdata_1.csv")
 		.get(function(error, rows) {
-			// console.log(rows);
+			console.log(rows);
 			var max_date = 0;
 			var min_date = new Date();
 			var day_count = {};
+
+			var protest_types = [];
 
 			for(var x = 0; x < rows.length; x++) {
 				var row = rows[x];
@@ -168,7 +175,27 @@ function initialize() {
 				rows[x].LatLng = new L.LatLng(rows[x].Latitude, rows[x].Longitude);
 				rows[x].date = start_date;
 				(day_count[rows[x].date]) ? day_count[rows[x].date] = day_count[rows[x].date] + 1 : day_count[rows[x].date] = 1;
+
+				protest_types.push(row.type);
 			}
+
+			protest_types = d3.set(protest_types).values();
+			console.log(protest_types);
+			d3.select("#protest_types")
+				.selectAll("div").data(protest_types).enter()
+				.append("div")
+				.classed("checkbox", true)
+				.append("label").text(function(d) {
+					return d;
+				})
+				.append("input")
+				.attr("checked", true)
+    			.attr("type", "checkbox")
+    			.attr("id", function(d,i) { return 'a'+i; })
+    			.on("click", function(t) {
+    				
+    				update()
+    			});
 
 			var dots = g.selectAll("circle")
 				.data(rows)
@@ -176,7 +203,40 @@ function initialize() {
 				.attr("r", function (d) { return 20 })
 				.attr("class", "protest-dot hidden")
 				.classed("violent", function(d) {
-					return d["Violent_or_non_violent CODE"] == "1.00"
+					return d["violent"] == "1"
+				})
+				.classed("service_delivery", function(d) {
+					return d["type"] == "Service delivery"
+				})
+				.classed("labour", function(d) {
+					return d["type"] == "Labour related"
+				})
+				.classed("vigilantism", function(d) {
+					return d["type"] == "Vigilantism"
+				})
+				.classed("crime", function(d) {
+					return d["type"] == "Crime related"
+				})
+				.classed("education", function(d) {
+					return d["type"] == "Education related"
+				})
+				.classed("transport", function(d) {
+					return d["type"] == "Transport related"
+				})
+				.classed("xenophobia", function(d) {
+					return d["type"] == "Xenophobia"
+				})
+				.classed("political", function(d) {
+					return d["type"] == "Political causes"
+				})
+				.classed("election", function(d) {
+					return d["type"] == "Election related"
+				})
+				.classed("environment", function(d) {
+					return d["type"] == "Environment related"
+				})
+				.classed("individual", function(d) {
+					return d["type"] == "Individual causes"
 				})
 				.on("mouseover", function(e) {
 					var el = 
