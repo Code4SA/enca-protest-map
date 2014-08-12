@@ -16,15 +16,22 @@
 		<div class="col-md-12">
 			
 		<div class="col-md-9">
-			
-			<div id="headline"><h2>South Africa's Protest Map</h2></div>
+			<div id="header">
+				<div id="headline" class="col-md-8">
+					<h1>South Africa's Protest Map</h1>
+					<div id="blurb">Produced by <a href="http://code4sa.org" target="_blank">Code for South Africa</a> and <a href="http://enca.co.za" target="_blank">eNCA</a> | Data source <a href="http://www.issafrica.org" target="_blank">Institute for Security Studies</a> | <a href="protestdata.csv">CSV</a></div>
+				</div>
+
+				<div id="logos" class="col-md-4">
+					<a href="http://code4sa.org" target="_blank"><img src="img/c4sa_logo.png" alt="Code for South Africa"></a>
+					<a href="http://enca.co.za" target="_blank"><img src="img/enca_logo.png" alt="eNCA"></a>
+				</div>
+			</div>
+
 			<div id="protest_types"></div>
 			
 			<div id="visible_date"></div>
-			<div id="logos">
-				<a href="http://code4sa.org" target="_blank"><img src="img/c4sa_logo.png" alt="Code for South Africa"></a>
-				<a href="http://enca.co.za" target="_blank"><img src="img/enca_logo.png" alt="eNCA"></a>
-			</div>
+			
 			<div id="map">
 			</div>
 
@@ -162,7 +169,7 @@
 		</div>
 	</div>
 </div>
-<script src="http://embed.wazimap.co.za/static/js/embed.chart.make.js"></script>
+
 <script type="text/javascript" src="d3/d3.v3.min.js"></script>
 <script type="text/javascript" src="leaflet/leaflet.js"></script>
 <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.2.4"></script>
@@ -172,9 +179,9 @@
 <script type="text/javascript">
 
 $(".collapse").on('shown.bs.collapse', function(e) {
-	$(".collapse").find("iframe").attr("src", "");
-	var el = $(e.currentTarget);
-	el.find("iframe").attr("src", el.find("iframe").attr("data-src"));
+	// $(".collapse").find("iframe").attr("src", "");
+	// var el = $(e.currentTarget);
+	// el.find("iframe").attr("src", el.find("iframe").attr("data-src"));
 });
 initialize();
 </script>
