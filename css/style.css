@@ -95,12 +95,28 @@ circle {
   color: #FFF;
   margin-top: 10px;
 }
-#container {
-  height: 800px;
-}
 #protest_types {
   position: absolute;
   z-index: 470;
   top: 100px;
   right: 40px;
+}
+#embed_code {
+  font-size: 8pt;
+}
+.embedded {
+  padding: 0px;
+  margin: 0px;
+  height: 600px;
+  width: 800px;
+  overflow: hidden;
+}
+.embedded #container,
+.embedded .col-md-12,
+.embedded .col-md-9 {
+  margin: 0px;
+  padding: 0px;
+}
+.embedded #embed_code_container {
+  display: none;
 }

@@ -119,7 +119,7 @@ svg , g
 }
 
 #container {
-	height: 800px;
+	// height: 800px;
 }
 
 #protest_types {
@@ -127,4 +127,23 @@ svg , g
 	z-index: 470;
 	top: 100px;
 	right: 40px;
+}
+
+#embed_code {
+	font-size: 8pt;
+}
+
+.embedded {
+	padding: 0px;
+	margin: 0px;
+	#container, .col-md-12, .col-md-9 {
+		margin: 0px;
+		padding: 0px;
+	}
+	#embed_code_container {
+		display: none;
+	}
+	height: 600px;
+	width: 800px;
+	overflow: hidden;
 }

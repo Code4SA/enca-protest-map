@@ -13,12 +13,18 @@ function initialize() {
 	settings.center_lng = 24;
 	settings.brush_start = false;
 	settings.brush_end = false;
+	settings.embed = false;
 
 	$.each(window.location.hash.replace("#", "").split("&"), function(i, d) {
 		var parts = d.split("=");
 		settings[parts[0]] = parts[1];
 	});;
 	console.log(settings);
+
+	//Check for embedding
+	if (settings.embed) {
+		$("body").addClass("embedded");
+	}
 
 	var map = L.map("map", { minZoom: 5, zoom: settings.zoom })
 		.setView([settings.center_lat, settings.center_lng], settings.zoom);
@@ -65,6 +71,7 @@ function initialize() {
 		var bounds = map.getBounds();
 		var center = map.getCenter();
 		window.location.hash = "#zoom=" + zoom + "&ne_lat=" + bounds._northEast.lat + "&ne_lng=" +  bounds._northEast.lng + "&sw_lat=" + bounds._southWest.lat + "&sw_lng=" +  bounds._southWest.lng + "&type_id=" + $("#protest_types option:selected").val() + "&brush_start=" + brush.extent()[0] + "&brush_end=" + brush.extent()[1] + "&center_lat=" + center.lat + "&center_lng=" + center.lng;
+		$("#embed_code").val("<iframe src='" + window.location + "&embed=1' width='600' height='800'></iframe>");
 	}
 
 	function change(dots) {
@@ -237,9 +244,22 @@ function initialize() {
 			d3.select("#hover")
 				.style("top", (posY - d3.select("#hover")[0][0].clientHeight - 10) + "px")
 		}
-		
-		d3.select("#hover")
-			.style("left", (e.originalEvent.clientX -200) + "px");
+		var width = 500;
+		var left = $("#container").offset().left;
+		var maxwidth = 800 + left;;
+		var minwidth = 0 + left;
+		// console.log();
+		// console.log(e.originalEvent.clientX, maxwidth - (width / 2));
+		if (e.originalEvent.clientX > (maxwidth - (width / 2))) {
+			d3.select("#hover")
+				.style("left", (maxwidth - (width / 2) - Math.round(width / 2) ) + "px");
+		} else if (e.originalEvent.clientX < (minwidth + (width / 2))) {
+			d3.select("#hover")
+				.style("left", minwidth + "px");
+		} else {
+			d3.select("#hover")
+				.style("left", (e.originalEvent.clientX - Math.round(width / 2)) + "px");
+		}
 	});
 
 	d3.csv("protestdata_1.csv")
