@@ -1,11 +1,32 @@
 var zoom_multiplier = 1;
 
 function initialize() {
-	var map = L.map("map", { minZoom: 5, zoom: 6 })
-		.setView([-29, 24], 5);
+
+	//Get initial variables from our location, else use default values
+	var settings = {};
+	settings.ne_lat = -16;
+	settings.ne_lng = 42;
+	settings.sw_lat = -38;
+	settings.sw_lng = 7;
+	settings.zoom = 5;
+	settings.center_lat = -29;
+	settings.center_lng = 24;
+
+	$.each(window.location.hash.replace("#", "").split("&"), function(i, d) {
+		var parts = d.split("=");
+		settings[parts[0]] = parts[1];
+	});;
+	console.log(settings);
+
+	var map = L.map("map", { minZoom: 5, zoom: settings.zoom })
+		.setView([settings.center_lat, settings.center_lng], settings.zoom);
+	
 	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-	}).addTo(map);
+		// attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+	})
+	.addTo(map);
+
+	// map.attribution({position:"topleft"});
 
 	map.setMaxBounds([
 		[-16, 42],
@@ -17,6 +38,10 @@ function initialize() {
 		.attr('r', map._zoom);
 	});
 
+	map.on("moveend", function(e) {
+		update_url();
+	});
+
 	var sliderpos = 0;
 	var data = [];
 	var date_scale = null;
@@ -25,13 +50,20 @@ function initialize() {
 	var scrubsvg = d3.select("#scrubber")
 		.append("svg")
 		.attr("width", 800)
-		.attr("height", 100)
+		.attr("height", 70)
 	;
 	var g = svg.append("g");
 	var date_points = 200;
 	var brush = d3.svg.brush();
 
 	var dateformat = d3.time.format("%e %B, %Y");
+
+	function update_url() {
+		var zoom = map._zoom;
+		var bounds = map.getBounds();
+		var center = map.getCenter();
+		window.location.hash = "#zoom=" + zoom + "&ne_lat=" + bounds._northEast.lat + "&ne_lng=" +  bounds._northEast.lng + "&sw_lat=" + bounds._southWest.lat + "&sw_lng=" +  bounds._southWest.lng + "&type_id=" + $("#protest_types option:selected").val() + "&brush_start=" + brush.extent()[0] + "&brush_end=" + brush.extent()[1] + "&center_lat=" + center.lat + "&center_lng=" + center.lng;
+	}
 
 	function change(dots) {
 		dots.attr("cx",function(d) { return map.latLngToLayerPoint(d.LatLng).x});
@@ -58,6 +90,52 @@ function initialize() {
 		return (brush_show && filter_show);
 	}
 
+	function update_scrubber_days() {
+		
+		day_count = {};
+		var max_day_count = 0;
+		var day_count_data = [];
+		type_id = $("#protest_types option:selected").val();
+		g.selectAll(".protest-dot")
+			.each(function(d) {
+				if (type_id == 0) {
+					fitler_show = true;
+				} else if (d.type_id == type_id) {
+					filter_show = true;
+				} else {
+					filter_show = false;
+				}
+				if (filter_show) {
+					(day_count[d.date]) ? day_count[d.date] = day_count[d.date] + 1 : day_count[d.date] = 1;
+					if (max_day_count < day_count[d.date]) max_day_count = day_count[d.date];
+				}
+			});
+		
+		for(dix in day_count) {
+			day_count_data.push({date: dix, val: day_count[dix]});
+		}
+		var x = d3.time.scale()
+			.domain([min_date, max_date])
+			.range([20, scrubsvg.attr("width") - 20])
+		;
+		var y = d3.scale.linear()
+			.domain([0, max_day_count])
+			.range([scrubsvg.attr("height"), 18]);
+
+		scrubsvg.selectAll(".bar")
+			.remove();
+		var bar = scrubsvg.selectAll(".bar")
+			.data(day_count_data)
+			.enter().append("g")
+			.attr("class", "bar")
+			.attr("transform", function(d) { return "translate(" + x(new Date(d.date)) + "," + y(d.val) + ")"; });
+		bar.append("rect")
+			.attr("x", 1)
+			.attr("width", 2)
+			.attr("transform", "translate(0, -0)")
+			.attr("height", 90);
+	}
+
 	function update() {
 		g.selectAll(".protest-dot")
 			.classed("hidden", function(d) {
@@ -76,6 +154,13 @@ function initialize() {
 			.ease("bounce")
 			.attr('r', map._zoom)
 		;
+
+		update_url();
+	}
+
+	function change_type_id() {
+		update();
+		update_scrubber_days();
 	}
 
 
@@ -85,18 +170,21 @@ function initialize() {
 			.text(dateformat(brush.extent()[0]) + " - " + dateformat(brush.extent()[1]));
 		update();
 	}
+	var max_date = 0;
+	var min_date = new Date();
+	var day_count = {};
 
 	function draw_graph(rows, hsvg) {
-		var margin = {top: 10, right: 30, bottom: 30, left: 30};
-		width = hsvg.attr("width");
+		var margin = {top: 0, right: 30, bottom: 0, left: 30};
+		
 		height = hsvg.attr("height");
-		var max_date = 0;
-		var min_date = new Date();
-		var day_count = {};
-		var max_day_count = 0;
+		width = hsvg.attr("width");
+		
 
 		for(var x = 0; x < rows.length; x++) {
 			var row = rows[x];
+			
+			
 			var start_date = new Date(row.Start_Date);
 			if (start_date > max_date) {
 				max_date = start_date;
@@ -106,46 +194,36 @@ function initialize() {
 			}
 			rows[x].LatLng = new L.LatLng(rows[x].Latitude, rows[x].Longitude);
 			rows[x].date = start_date;
-			(day_count[rows[x].date]) ? day_count[rows[x].date] = day_count[rows[x].date] + 1 : day_count[rows[x].date] = 1;
-			if (max_day_count < day_count[rows[x].date]) max_day_count = day_count[rows[x].date];
+			
+			
+			
 		}
 
-		var day_count_data = [];
-		for(dix in day_count) {
-			day_count_data.push({date: dix, val: day_count[dix]});
-		}
+		var tmp = new Date(max_date);
+		settings.brush_start = settings.brush_start || tmp.setMonth(tmp.getMonth() -1);
+		settings.brush_end = settings.brush_end || max_date;
+
+		brush.extent([new Date(settings.brush_start), new Date(settings.brush_end)]);
+		brushed();
+		
 
 		var x = d3.time.scale()
 			.domain([min_date, max_date])
-			.range([0, width])
+			.range([20, width - 20])
 		;
-
-		var y = d3.scale.linear()
-			.domain([0, max_day_count])
-			.range([height, margin.bottom]);
 
 		var xAxis = d3.svg.axis()
 			.scale(x)
 			.orient("bottom")
-			.ticks(8)
+			.ticks(9)
+			.outerTickSize(0)
 		;
-
-		var bar = hsvg.selectAll(".bar")
-			.data(day_count_data)
-			.enter().append("g")
-			.attr("class", "bar")
-			.attr("transform", function(d) { return "translate(" + x(new Date(d.date)) + "," + y(d.val) + ")"; });
-
-		bar.append("rect")
-			.attr("x", 1)
-			.attr("width", 2)
-			.attr("transform", "translate(0, -" + margin.bottom + ")")
-			.attr("height", function(d) { return height - y(d.val); });
 
 		hsvg.append("g")
 			.attr("class", "x axis")
-			.attr("transform", "translate(0," + (height - margin.bottom) + ")")
+			.attr("transform", "translate(0,0)")
 			.call(xAxis);
+		update_scrubber_days();
 	}
 
 	map.on("mousemove", function(e) {
@@ -164,13 +242,13 @@ function initialize() {
 
 	d3.csv("protestdata_1.csv")
 		.get(function(error, rows) {
-			console.log(rows);
+			// console.log(rows);
 			var max_date = 0;
 			var min_date = new Date();
 			var day_count = {};
 
 			var protest_types = [];
-			protest_types[0] = "All";
+			protest_types[0] = "All types";
 			for(var x = 0; x < rows.length; x++) {
 				var row = rows[x];
 				var start_date = new Date(row.Start_Date);
@@ -197,14 +275,19 @@ function initialize() {
 				.attr("value", function(d, i) {
 					return i;
 				})
+				.attr("selected", function(d, i) {
+					if (i == settings.type_id) {
+						return "selected";
+					}
+				})
 				.text(
 					function(d) {
 						return d;
 					}
-				)
+				);
 
 			d3.select("#protest_types")
-				.on("change", update)
+				.on("change", change_type_id)
 
 			var dots = g.selectAll("circle")
 				.data(rows)
@@ -237,53 +320,53 @@ function initialize() {
 					d3.select("#hover")
 						.classed("hidden", true);
 				})
-				.on("click", function(e) {
-					$("#ward_name").html("");
-					$("#accordion").hide();
-					$(".in").collapse('hide');
-					$(".collapse").find("iframe").attr("src", "");
-					d3.json("http://wards.code4sa.org/?database=wards_2011&address=" + e.Latitude + "," + e.Longitude, function(warddata) {
-						// console.log(warddata[0]);
-						$("#ward_name").html("Ward " + warddata[0].wards_no + "<br />" + warddata[0].municipality + "<br />" + warddata[0].province); 
-						var base_url = "http://embed.wazimap.co.za/static/iframe.html?chartType=histogram&chartHeight=200&chartQualifier=&chartTitle=Voters+by+party&initialSort=&statType=scaled-percentage" ;
-						var charts = {
-							voting: {
-								chartDataID: "elections-national_2014-party_distribution",
-								chartTitle: "Voters by party"
-							},
-							water: {
-								chartDataID: "service_delivery-water_source_distribution",
-								chartTitle: "Population by water source"
-							},
-							refuse: {
-								chartDataID: "service_delivery-refuse_disposal_distribution",
-								chartTitle: "Population by refuse disposal"
-							},
-							toilet: {
-								chartDataID: "service_delivery-toilet_facilities_distribution",
-								chartTitle: "Population by toilet facilities"
-							},
-							employment: {
-								chartDataID: "economics-employment_status",
-								chartTitle: "Population by employment status"
-							},
-							income: {
-								chartDataID: "economics-individual_income_distribution",
-								chartTitle: "Employees by monthly income"
-							},
-							education: {
-								chartDataID: "education-educational_attainment_distribution",
-								chartTitle: "Population by highest education level"
-							},
-						}
-						for (cid in charts) {
-							var url = base_url + "&geoID=ward-" + warddata[0].ward + "&chartDataID=" + charts[cid].chartDataID + "&chartTitle=" + charts[cid].chartTitle;
-							d3.select("#wazi-embed-" + cid).attr("data-src", url);
-						}
-						$("#accordion").show();
-					});
-				})
-			;
+			// 	.on("click", function(e) {
+			// 		$("#ward_name").html("");
+			// 		$("#accordion").hide();
+			// 		$(".in").collapse('hide');
+			// 		$(".collapse").find("iframe").attr("src", "");
+			// 		d3.json("http://wards.code4sa.org/?database=wards_2011&address=" + e.Latitude + "," + e.Longitude, function(warddata) {
+			// 			// console.log(warddata[0]);
+			// 			$("#ward_name").html("Ward " + warddata[0].wards_no + "<br />" + warddata[0].municipality + "<br />" + warddata[0].province); 
+			// 			var base_url = "http://embed.wazimap.co.za/static/iframe.html?chartType=histogram&chartHeight=200&chartQualifier=&chartTitle=Voters+by+party&initialSort=&statType=scaled-percentage" ;
+			// 			var charts = {
+			// 				voting: {
+			// 					chartDataID: "elections-national_2014-party_distribution",
+			// 					chartTitle: "Voters by party"
+			// 				},
+			// 				water: {
+			// 					chartDataID: "service_delivery-water_source_distribution",
+			// 					chartTitle: "Population by water source"
+			// 				},
+			// 				refuse: {
+			// 					chartDataID: "service_delivery-refuse_disposal_distribution",
+			// 					chartTitle: "Population by refuse disposal"
+			// 				},
+			// 				toilet: {
+			// 					chartDataID: "service_delivery-toilet_facilities_distribution",
+			// 					chartTitle: "Population by toilet facilities"
+			// 				},
+			// 				employment: {
+			// 					chartDataID: "economics-employment_status",
+			// 					chartTitle: "Population by employment status"
+			// 				},
+			// 				income: {
+			// 					chartDataID: "economics-individual_income_distribution",
+			// 					chartTitle: "Employees by monthly income"
+			// 				},
+			// 				education: {
+			// 					chartDataID: "education-educational_attainment_distribution",
+			// 					chartTitle: "Population by highest education level"
+			// 				},
+			// 			}
+			// 			for (cid in charts) {
+			// 				var url = base_url + "&geoID=ward-" + warddata[0].ward + "&chartDataID=" + charts[cid].chartDataID + "&chartTitle=" + charts[cid].chartTitle;
+			// 				d3.select("#wazi-embed-" + cid).attr("data-src", url);
+			// 			}
+			// 			$("#accordion").show();
+			// 		});
+			// 	})
+			// ;
 			
 			change(dots);
 			
@@ -304,7 +387,7 @@ function initialize() {
 				.on("brush", brushed);
 			back_month = new Date(max_date);
 			back_month = back_month.setMonth(back_month.getMonth() - 1);
-			brush.extent([new Date(back_month), new Date(max_date)]);
+			
 			brushed();
 			draw_graph(rows, scrubsvg);
 
