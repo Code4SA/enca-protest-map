@@ -11,6 +11,8 @@ function initialize() {
 	settings.zoom = 5;
 	settings.center_lat = -29;
 	settings.center_lng = 24;
+	settings.brush_start = false;
+	settings.brush_end = false;
 
 	$.each(window.location.hash.replace("#", "").split("&"), function(i, d) {
 		var parts = d.split("=");
