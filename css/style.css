@@ -58,6 +58,10 @@ circle {
   font-size: 9pt;
   z-index: 1000;
 }
+#hover #loading_msg {
+  display: none;
+  font-size: 18pt;
+}
 .panel-body {
   height: 280px;
   overflow-y: scroll;
