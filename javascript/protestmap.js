@@ -288,9 +288,32 @@ function initialize() {
 		}
 	});
 
+	function show_hover(data) {
+		var el = d3.select("#hover");
+		el.classed("loading", true);
+		el.classed("hidden", false);
+		var issid = data.ISSID;
+
+		$.getJSON("https://code4sa.demo.socrata.com/resource/7y3u-atvk.json?ISSID=" + issid, function(d) {
+			el.classed("loading", false);
+			d = d.pop();
+			// console.log(d);
+			if (d.start_date == d.end_date)
+				el.select("#date").text(dateformat(new Date(d.start_date)));
+			else
+				el.select("#date").text(dateformat(new Date(d.start_date)) + " to " + dateformat(new Date(d.end_date)));
+			el.select("#Violent_or_violent").text(d.violent_or_violent);
+			el.select("#type").text(d.type);
+			el.select("#TownCity_Name").text(d.towncity_name);
+			el.select("#Suburbareaplacename").text(d.suburbareaplacename);
+			el.select("#Reasonforprotest").text(d.reasonforprotest);
+			el.select("#Municipality_metro").text(d.municipality_metro);
+			el.select("#First_Street").text(d.first_street);
+		});
+	}
 
 	// Get the data
-	d3.csv("protestdata_1.csv")
+	d3.csv("protestdata_small.csv")
 		.get(function(error, rows) {
 			var day_count = {};
 			var protest_types = ["All types"];
@@ -347,20 +370,7 @@ function initialize() {
 					return d["type_id"]
 				}) 
 				.on("mouseover", function(e) {
-					var el = 
-					d3.select("#hover")
-						.classed("hidden", false);
-					if (e.Start_Date == e.End_Date)
-						el.select("#date").text(dateformat(new Date(e.Start_Date)));
-					else
-						el.select("#date").text(dateformat(new Date(e.Start_Date)) + " to " + dateformat(new Date(e.End_Date)));
-					el.select("#Violent_or_violent").text(e.Violent_or_violent);
-					el.select("#type").text(e.type);
-					el.select("#TownCity_Name").text(e.TownCity_Name);
-					el.select("#Suburbareaplacename").text(e.Suburbareaplacename);
-					el.select("#Reasonforprotest").text(e.Reasonforprotest);
-					el.select("#Municipality_metro").text(e.Municipality_metro);
-					el.select("#First_Street").text(e.First_Street);
+					show_hover(e);
 				})
 				.on("mouseout", function(e) {
 					d3.select("#hover")
