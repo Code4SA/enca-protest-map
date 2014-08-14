@@ -19,9 +19,6 @@ circle {
   fill: steelblue;
   fill-opacity: .8;
 }
-.scrubber {
-  fill: #444;
-}
 .extent {
   fill-opacity: 0.2;
   fill: steelblue;
@@ -35,12 +32,15 @@ circle {
 }
 #visible_date {
   position: absolute;
-  bottom: 90px;
+  bottom: 80px;
   z-index: 999;
   margin-left: 0px;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(255, 255, 255, 0.6);
+  border-top: 1px #CCC solid;
+  border-right: 1px #CCC solid;
+  border-bottom: 1px #CCC solid;
   padding: 10px;
-  color: #FFF;
+  color: #444;
 }
 .bar rect {
   fill: steelblue;
@@ -72,6 +72,8 @@ circle {
   z-index: 500;
   font-size: 8pt;
   fill: #444;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-top: 1px #CCC solid;
 }
 #header {
   background-color: #FFF;
