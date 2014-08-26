@@ -1,3 +1,4 @@
+
 var zoom_multiplier = 1;
 
 function dateRangeObj(date_start, date_end) {
@@ -395,29 +396,44 @@ function initialize() {
 		position_hover(e);
 	});
 
+	function hover_within_window(e, elId) {
+		// console.log(e.pageX, e.pageY);
+		var el = $("#"+elId);
+		// console.log();
+		var elWidth = el.outerWidth();
+		var elHeight = el.outerHeight();
+		var elOffsetLeft = Math.round((elWidth / 2) + el.offsetParent().offset().left);
+		var posX = e.pageX;
+		var posY = e.pageY;
+		// console.log(posX - elOffsetLeft);
+		el.css("left", (posX - elOffsetLeft) + "px" );
+		el.css("top", (posY + 20) + "px");
+	}
+
 	function position_hover(e) {
-		posY = e.originalEvent.y;
-		if(e.target._size.y / e.containerPoint.y > 2) {
-			d3.select("#hover")
-				.style("top", (posY + 10) + "px")
-		} else {
-			d3.select("#hover")
-				.style("top", (posY - d3.select("#hover")[0][0].clientHeight - 10) + "px")
-		}
-		var width = 500;
-		var left = $("#container").offset().left;
-		var maxwidth = 800 + left;;
-		var minwidth = 0 + left;
-		if (e.originalEvent.clientX > (maxwidth - (width / 2))) {
-			d3.select("#hover")
-				.style("left", (maxwidth - (width / 2) - Math.round(width / 2) ) + "px");
-		} else if (e.originalEvent.clientX < (minwidth + (width / 2))) {
-			d3.select("#hover")
-				.style("left", minwidth + "px");
-		} else {
-			d3.select("#hover")
-				.style("left", (e.originalEvent.clientX - Math.round(width / 2)) + "px");
-		}
+		hover_within_window(e.originalEvent, "hover");
+		// posY = e.originalEvent.y;
+		// if(e.target._size.y / e.containerPoint.y > 2) {
+		// 	d3.select("#hover")
+		// 		.style("top", (posY + 10) + "px")
+		// } else {
+		// 	d3.select("#hover")
+		// 		.style("top", (posY - d3.select("#hover")[0][0].clientHeight - 10) + "px")
+		// }
+		// var width = 500;
+		// var left = $("#container").offset().left;
+		// var maxwidth = 800 + left;;
+		// var minwidth = 0 + left;
+		// if (e.originalEvent.clientX > (maxwidth - (width / 2))) {
+		// 	d3.select("#hover")
+		// 		.style("left", (maxwidth - (width / 2) - Math.round(width / 2) ) + "px");
+		// } else if (e.originalEvent.clientX < (minwidth + (width / 2))) {
+		// 	d3.select("#hover")
+		// 		.style("left", minwidth + "px");
+		// } else {
+		// 	d3.select("#hover")
+		// 		.style("left", (e.originalEvent.clientX - Math.round(width / 2)) + "px");
+		// }
 	}
 
 	function show_hover(data) {

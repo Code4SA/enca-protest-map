@@ -48,7 +48,7 @@ circle {
   shape-rendering: crispEdges;
 }
 #hover {
-  position: fixed;
+  position: absolute;
   background-color: #FFF;
   padding: 10px;
   border: 1px #CCC solid;
@@ -58,6 +58,7 @@ circle {
   width: 500px;
   font-size: 9pt;
   z-index: 1000;
+  margin: 0px;
 }
 #hover #loading_msg {
   display: none;
