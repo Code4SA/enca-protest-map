@@ -396,22 +396,40 @@ function initialize() {
 		position_hover(e);
 	});
 
-	function hover_within_window(e, elId) {
-		// console.log(e.pageX, e.pageY);
-		var el = $("#"+elId);
-		// console.log();
+	function hover_within_window(e, elId, containerId) {
+		var el = $("#" + elId);
+		var elContainer = $("#" + containerId);
 		var elWidth = el.outerWidth();
 		var elHeight = el.outerHeight();
 		var elOffsetLeft = Math.round((elWidth / 2) + el.offsetParent().offset().left);
 		var posX = e.pageX;
 		var posY = e.pageY;
-		// console.log(posX - elOffsetLeft);
-		el.css("left", (posX - elOffsetLeft) + "px" );
-		el.css("top", (posY + 20) + "px");
+		var containerLeft = elContainer.position().left;
+		var containerTop = elContainer.position().top;
+		var left = (posX - elOffsetLeft);
+		var top = (posY + 20);
+		console.log(containerTop);
+		if (left < containerLeft) {
+			left = containerLeft;
+		}
+		if ((left + elWidth) > (elContainer.outerWidth() + containerLeft)) {
+			left = elContainer.outerWidth() - elWidth + containerLeft;
+		}
+
+		console.log(el.offsetParent().offset().top);
+		if (elContainer.outerHeight() < (top + containerTop)) {
+			el.css("bottom", ( (elContainer.outerHeight() - posY) + el.offsetParent().offset().top + 100  )  + "px");
+			el.css("top", "auto");
+		} else {
+			el.css("top", top + "px");
+			el.css("bottom", "auto");
+		}
+		el.css("left", left + "px" );
+		
 	}
 
 	function position_hover(e) {
-		hover_within_window(e.originalEvent, "hover");
+		hover_within_window(e.originalEvent, "hover", "map");
 		// posY = e.originalEvent.y;
 		// if(e.target._size.y / e.containerPoint.y > 2) {
 		// 	d3.select("#hover")
