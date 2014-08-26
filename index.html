@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="leaflet/leaflet.css" />
 	<!--[if lte IE 8]><link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.ie.css" /><![endif]-->
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.flatly.css">
-	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 	<div id="container" class="container">
@@ -28,15 +28,37 @@
 				</div>
 			</div>
 
-			<div id="protest_types"></div>
 			
-			<div id="visible_date"></div>
+
 			
-			<div id="map">
+			
+			<div id="map_outer">
+				<div id="scrubber"></div>
+				<div id="visible_date"></div>
+				<div id="toolbar">
+					<div id="protest_types"></div>
+					<div id="keys">
+						<div class="key">
+							<div class="color-dot red"></div>
+							Violent
+						</div>
+						<div class="key">
+							<div class="color-dot blue"></div>
+							Peaceful
+						</div>
+					</div>
+					<div id="dates">
+						<h5>Start Date</h5>
+						<select name="" id="start_date" class="form-control"></select>
+						<h5>End Date</h5>
+						<select name="" id="end_date" class="form-control"></select>
+					</div>
+				</div>
+				<div id="map"></div>
 			</div>
 
 			
-			<div id="scrubber"></div>
+			
 			<div id="histogram"></div>
 			<div id="hover" class="hidden">
 				<div id="loading_msg">
@@ -75,96 +97,6 @@
 					<div id="collapseVoting" class="panel-collapse collapse">
 						<div class="panel-body">
 							<iframe id="wazi-embed-voting" class="census-reporter-embed" frameborder="0" width="100%" height="600" style="margin: 1em; max-width: 720px;"></iframe>
-						</div>
-					</div>
-				</div>
-
-				<div class="panel panel-default" id="panel-water">
-					<div class="panel-heading">
-						<h4 class="panel-title">
-							<a data-toggle="collapse" data-parent="#accordion" href="#collapseWater">
-								Water
-							</a>
-						</h4>
-					</div>
-					<div id="collapseWater" class="panel-collapse collapse">
-						<div class="panel-body">
-							<iframe id="wazi-embed-water" class="census-reporter-embed" frameborder="0" width="100%" height="300" style="margin: 1em; max-width: 720px; overflow-y: scroll"></iframe>
-						</div>
-					</div>
-				</div>
-
-				<div class="panel panel-default" id="panel-refuse">
-					<div class="panel-heading">
-						<h4 class="panel-title">
-							<a data-toggle="collapse" data-parent="#accordion" href="#collapseRefuse">
-								Refuse
-							</a>
-						</h4>
-					</div>
-					<div id="collapseRefuse" class="panel-collapse collapse">
-						<div class="panel-body">
-							<iframe id="wazi-embed-refuse" class="census-reporter-embed" frameborder="0" width="100%" height="350" style="margin: 1em; max-width: 720px;"></iframe>
-						</div>
-					</div>
-				</div>
-
-				<div class="panel panel-default" id="panel-toilet">
-					<div class="panel-heading">
-						<h4 class="panel-title">
-							<a data-toggle="collapse" data-parent="#accordion" href="#collapseToilet">
-								Toilet
-							</a>
-						</h4>
-					</div>
-					<div id="collapseToilet" class="panel-collapse collapse">
-						<div class="panel-body">
-							<iframe id="wazi-embed-toilet" class="census-reporter-embed" frameborder="0" width="100%" height="400" style="margin: 1em; max-width: 720px;"></iframe>
-						</div>
-					</div>
-				</div>
-
-				<div class="panel panel-default" id="panel-employment">
-					<div class="panel-heading">
-						<h4 class="panel-title">
-							<a data-toggle="collapse" data-parent="#accordion" href="#collapseEmployment">
-								Employment
-							</a>
-						</h4>
-					</div>
-					<div id="collapseEmployment" class="panel-collapse collapse">
-						<div class="panel-body">
-							<iframe id="wazi-embed-employment" class="census-reporter-embed" frameborder="0" width="100%" height="350" style="margin: 1em; max-width: 720px;"></iframe>
-						</div>
-					</div>
-				</div>
-
-				<div class="panel panel-default" id="panel-income">
-					<div class="panel-heading">
-						<h4 class="panel-title">
-							<a data-toggle="collapse" data-parent="#accordion" href="#collapseIncome">
-								Income
-							</a>
-						</h4>
-					</div>
-					<div id="collapseIncome" class="panel-collapse collapse">
-						<div class="panel-body">
-							<iframe id="wazi-embed-income" class="census-reporter-embed" frameborder="0" width="100%" height="780" style="margin: 1em; max-width: 720px;"></iframe>
-						</div>
-					</div>
-				</div>
-
-				<div class="panel panel-default" id="panel-education">
-					<div class="panel-heading">
-						<h4 class="panel-title">
-							<a data-toggle="collapse" data-parent="#accordion" href="#collapseEducation">
-								Education
-							</a>
-						</h4>
-					</div>
-					<div id="collapseEducation" class="panel-collapse collapse">
-						<div class="panel-body">
-							<iframe id="wazi-embed-education" class="census-reporter-embed" frameborder="0" width="100%" height="600" style="margin: 1em; max-width: 720px;"></iframe>
 						</div>
 					</div>
 				</div>

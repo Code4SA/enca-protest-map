@@ -43,7 +43,7 @@ svg , g
 
 #visible_date {
 	position: absolute;
-	bottom: 80px;
+	margin-top: 80px;
 	z-index: 999;
 	// left: 50px;
 	margin-left: 0px;
@@ -53,6 +53,7 @@ svg , g
 	border-bottom: 1px #CCC solid;
 	padding: 10px;
 	color: #444;
+	font-size: 14pt;
 }
 
 .bar rect {
@@ -106,13 +107,14 @@ svg , g
 
 #scrubber {
 	position: absolute;
-	bottom: 0px;
+	margin-top: 0px;
 	z-index: 500;
 
 	font-size: 8pt;
 	fill: #444;
 	background-color: rgba(255,255,255,0.6);
-	border-top: 1px #CCC solid;
+	border-bottom: 1px #CCC solid;
+	height: 70px;
 }
 
 #header {
@@ -162,10 +164,10 @@ svg , g
 }
 
 #protest_types {
-	position: absolute;
-	z-index: 470;
-	top: 100px;
-	right: 40px;
+	// position: absolute;
+	// z-index: 470;
+	// top: 100px;
+	// right: 40px;
 }
 
 #embed_code {
@@ -185,4 +187,32 @@ svg , g
 	height: 600px;
 	width: 800px;
 	overflow: hidden;
+}
+
+#toolbar {
+	position: absolute;
+	z-index: 470;
+	margin-top: 80px;
+	right: 40px;
+	background-color: rgba(255,255,255,0.8);
+	border: 1px #CCC solid;
+	padding: 10px;
+
+	#keys {
+		margin: 10px 0px;
+		.color-dot {
+			width: 15px;
+			height: 15px;
+			float: left;
+			margin-right: 10px;
+		}
+
+		.red {
+			background-color: #cf1a1f;
+		}
+
+		.blue {
+			background-color: steelblue;
+		}
+	}
 }

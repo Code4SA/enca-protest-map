@@ -32,7 +32,7 @@ circle {
 }
 #visible_date {
   position: absolute;
-  bottom: 80px;
+  margin-top: 80px;
   z-index: 999;
   margin-left: 0px;
   background-color: rgba(255, 255, 255, 0.6);
@@ -41,6 +41,7 @@ circle {
   border-bottom: 1px #CCC solid;
   padding: 10px;
   color: #444;
+  font-size: 14pt;
 }
 .bar rect {
   fill: steelblue;
@@ -72,12 +73,13 @@ circle {
 }
 #scrubber {
   position: absolute;
-  bottom: 0px;
+  margin-top: 0px;
   z-index: 500;
   font-size: 8pt;
   fill: #444;
   background-color: rgba(255, 255, 255, 0.6);
-  border-top: 1px #CCC solid;
+  border-bottom: 1px #CCC solid;
+  height: 70px;
 }
 #header {
   background-color: #FFF;
@@ -108,12 +110,6 @@ circle {
 #header #blurb {
   font-size: 8pt;
 }
-#protest_types {
-  position: absolute;
-  z-index: 470;
-  top: 100px;
-  right: 40px;
-}
 #embed_code {
   font-size: 8pt;
 }
@@ -132,4 +128,28 @@ circle {
 }
 .embedded #embed_code_container {
   display: none;
+}
+#toolbar {
+  position: absolute;
+  z-index: 470;
+  margin-top: 80px;
+  right: 40px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px #CCC solid;
+  padding: 10px;
+}
+#toolbar #keys {
+  margin: 10px 0px;
+}
+#toolbar #keys .color-dot {
+  width: 15px;
+  height: 15px;
+  float: left;
+  margin-right: 10px;
+}
+#toolbar #keys .red {
+  background-color: #cf1a1f;
+}
+#toolbar #keys .blue {
+  background-color: steelblue;
 }
