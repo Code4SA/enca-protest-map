@@ -47,23 +47,6 @@ circle {
   fill: steelblue;
   shape-rendering: crispEdges;
 }
-#hover {
-  position: absolute;
-  background-color: #FFF;
-  padding: 10px;
-  border: 1px #CCC solid;
-  opacity: 0.95;
-  top: 0px;
-  left: 0px;
-  width: 500px;
-  font-size: 9pt;
-  z-index: 1000;
-  margin: 0px;
-}
-#hover #loading_msg {
-  display: none;
-  font-size: 18pt;
-}
 .panel-body {
   height: 280px;
   overflow-y: scroll;

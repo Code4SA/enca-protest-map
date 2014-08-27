@@ -389,99 +389,126 @@ function initialize() {
 		update_scrubber_days();
 	}
 
-	map.on("mousemove", function(e) {
-		if (clicked) {
-			return false;
-		}
-		position_hover(e);
+	map.on("click", function(e) {
+		// if (clicked) {
+		// 	return false;
+		// }
+		// position_hover(e);
+		// d3.select("#hover").classed("hidden", false);
 	});
 
-	function hover_within_window(e, elId, containerId) {
-		var el = $("#" + elId);
-		var elContainer = $("#" + containerId);
-		var elWidth = el.outerWidth();
-		var elHeight = el.outerHeight();
-		var elOffsetLeft = Math.round((elWidth / 2) + el.offsetParent().offset().left);
-		var posX = e.pageX;
-		var posY = e.pageY;
-		var containerLeft = elContainer.position().left;
-		var containerTop = elContainer.position().top;
-		var left = (posX - elOffsetLeft);
-		var top = (posY + 20);
-		console.log(containerTop);
-		if (left < containerLeft) {
-			left = containerLeft;
-		}
-		if ((left + elWidth) > (elContainer.outerWidth() + containerLeft)) {
-			left = elContainer.outerWidth() - elWidth + containerLeft;
-		}
+	var popup = L.popup();
 
-		console.log(el.offsetParent().offset().top);
-		if (elContainer.outerHeight() < (top + containerTop)) {
-			el.css("bottom", ( (elContainer.outerHeight() - posY) + el.offsetParent().offset().top + 100  )  + "px");
-			el.css("top", "auto");
-		} else {
-			el.css("top", top + "px");
-			el.css("bottom", "auto");
-		}
-		el.css("left", left + "px" );
+function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        // .setContent("You clicked the map at " + e.latlng.toString())
+        // .openOn(map);
+}
+
+map.on('click', onMapClick);
+
+	// function hover_within_window(e, elId, containerId) {
+	// 	var el = $("#" + elId);
+	// 	var elContainer = $("#" + containerId);
+	// 	var elWidth = el.outerWidth();
+	// 	var elHeight = el.outerHeight();
+	// 	var elOffsetLeft = Math.round((elWidth / 2) + el.offsetParent().offset().left);
+	// 	var posX = e.pageX;
+	// 	var posY = e.pageY;
+	// 	var containerLeft = elContainer.position().left;
+	// 	var containerTop = elContainer.position().top;
+	// 	var left = (posX - elOffsetLeft);
+	// 	var top = (posY + 20);
+	// 	// console.log(containerTop);
+	// 	if (left < containerLeft) {
+	// 		left = containerLeft;
+	// 	}
+	// 	if ((left + elWidth) > (elContainer.outerWidth() + containerLeft)) {
+	// 		left = elContainer.outerWidth() - elWidth + containerLeft;
+	// 	}
+
+	// 	// console.log(el.offsetParent().offset().top);
+	// 	if (elContainer.outerHeight() < (top + containerTop)) {
+	// 		el.css("bottom", ( (elContainer.outerHeight() - posY) + el.offsetParent().offset().top + 100  )  + "px");
+	// 		el.css("top", "auto");
+	// 	} else {
+	// 		el.css("top", top + "px");
+	// 		el.css("bottom", "auto");
+	// 	}
+	// 	el.css("left", left + "px" );
 		
-	}
+	// }
 
-	function position_hover(e) {
-		hover_within_window(e.originalEvent, "hover", "map");
-		// posY = e.originalEvent.y;
-		// if(e.target._size.y / e.containerPoint.y > 2) {
-		// 	d3.select("#hover")
-		// 		.style("top", (posY + 10) + "px")
-		// } else {
-		// 	d3.select("#hover")
-		// 		.style("top", (posY - d3.select("#hover")[0][0].clientHeight - 10) + "px")
-		// }
-		// var width = 500;
-		// var left = $("#container").offset().left;
-		// var maxwidth = 800 + left;;
-		// var minwidth = 0 + left;
-		// if (e.originalEvent.clientX > (maxwidth - (width / 2))) {
-		// 	d3.select("#hover")
-		// 		.style("left", (maxwidth - (width / 2) - Math.round(width / 2) ) + "px");
-		// } else if (e.originalEvent.clientX < (minwidth + (width / 2))) {
-		// 	d3.select("#hover")
-		// 		.style("left", minwidth + "px");
-		// } else {
-		// 	d3.select("#hover")
-		// 		.style("left", (e.originalEvent.clientX - Math.round(width / 2)) + "px");
-		// }
-	}
+	// function position_hover(e) {
+	// 	hover_within_window(e.originalEvent, "hover", "map");
+	// 	// posY = e.originalEvent.y;
+	// 	// if(e.target._size.y / e.containerPoint.y > 2) {
+	// 	// 	d3.select("#hover")
+	// 	// 		.style("top", (posY + 10) + "px")
+	// 	// } else {
+	// 	// 	d3.select("#hover")
+	// 	// 		.style("top", (posY - d3.select("#hover")[0][0].clientHeight - 10) + "px")
+	// 	// }
+	// 	// var width = 500;
+	// 	// var left = $("#container").offset().left;
+	// 	// var maxwidth = 800 + left;;
+	// 	// var minwidth = 0 + left;
+	// 	// if (e.originalEvent.clientX > (maxwidth - (width / 2))) {
+	// 	// 	d3.select("#hover")
+	// 	// 		.style("left", (maxwidth - (width / 2) - Math.round(width / 2) ) + "px");
+	// 	// } else if (e.originalEvent.clientX < (minwidth + (width / 2))) {
+	// 	// 	d3.select("#hover")
+	// 	// 		.style("left", minwidth + "px");
+	// 	// } else {
+	// 	// 	d3.select("#hover")
+	// 	// 		.style("left", (e.originalEvent.clientX - Math.round(width / 2)) + "px");
+	// 	// }
+	// }
+	// var popup = L.popup()
+ //    .setLatLng(latlng)
+ //    .setContent('<p>Hello world!<br />This is a nice popup.</p>')
+ //    .openOn(map);
 
-	function show_hover(data) {
-		var el = d3.select("#hover");
-		el.classed("loading", true);
-		el.classed("hidden", false);
-		var issid = data.ISSID;
+	// function show_hover(data) {
+		
+	// 	var el = d3.select("#hover");
+	// 	el.classed("loading", true);
+	// 	el.classed("hidden", false);
+	// 	var issid = data.ISSID;
+
+	// 	$.getJSON("https://code4sa.demo.socrata.com/resource/7y3u-atvk.json?ISSID=" + issid, function(d) {
+	// 		el.classed("loading", false);
+	// 		d = d.pop();
+	// 		// console.log(d);
+	// 		if (d.start_date == d.end_date)
+	// 			el.select("#date").text(dateformat(new Date(d.start_date)));
+	// 		else
+	// 			el.select("#date").text(dateformat(new Date(d.start_date)) + " to " + dateformat(new Date(d.end_date)));
+	// 		el.select("#Violent_or_violent").text(d.violent_or_violent);
+	// 		el.select("#type").text(d.type);
+	// 		el.select("#TownCity_Name").text(d.towncity_name);
+	// 		el.select("#Suburbareaplacename").text(d.suburbareaplacename);
+	// 		el.select("#Reasonforprotest").text(d.reasonforprotest);
+	// 		el.select("#Municipality_metro").text(d.municipality_metro);
+	// 		el.select("#First_Street").text(d.first_street);
+	// 	});
+	// }
+
+	function show_tooltip(sender) {
+		// console.log(sender);
+		var issid = sender.ISSID;
 
 		$.getJSON("https://code4sa.demo.socrata.com/resource/7y3u-atvk.json?ISSID=" + issid, function(d) {
-			el.classed("loading", false);
 			d = d.pop();
-			// console.log(d);
-			if (d.start_date == d.end_date)
-				el.select("#date").text(dateformat(new Date(d.start_date)));
-			else
-				el.select("#date").text(dateformat(new Date(d.start_date)) + " to " + dateformat(new Date(d.end_date)));
-			el.select("#Violent_or_violent").text(d.violent_or_violent);
-			el.select("#type").text(d.type);
-			el.select("#TownCity_Name").text(d.towncity_name);
-			el.select("#Suburbareaplacename").text(d.suburbareaplacename);
-			el.select("#Reasonforprotest").text(d.reasonforprotest);
-			el.select("#Municipality_metro").text(d.municipality_metro);
-			el.select("#First_Street").text(d.first_street);
+			var sdate = dateformat(new Date(d.start_date));
+			if (d.start_date != d.end_date) {
+				sdate = sdate + " to " + dateformat(new Date(d.end_date));
+			}
+			popup.setContent("<strong>" + d.violent_or_violent + " " + d.type.toLowerCase() + " protest at " + d.suburbareaplacename + ", " + d.towncity_name + " on " + sdate + "</strong>\n<p>" + d.reasonforprotest + "</p>");
+			popup.openOn(map);
 		});
 	}
-
-	// function click_hover(data) {
-	// 	clicked = true;
-	// 	show_hover(data);
-	// }
 
 	// Get the data
 	d3.csv("protestdata_small.csv")
@@ -583,24 +610,25 @@ function initialize() {
 				.attr("data-protest-type", function(d) {
 					return d["type_id"]
 				}) 
-				.on("mouseover", function(e) {
-					if (!clicked) {
-						show_hover(e);
-					}
-				})
+				// .on("mouseover", function(e) {
+				// 	if (!clicked) {
+				// 		show_hover(e);
+				// 	}
+				// })
 				// .on("click", function(e) {
 				// 	click_hover(e)
 				// })
-				.on("mouseout", function(e) {
-					if (!clicked) {
-						d3.select("#hover")
-							.classed("hidden", true);
-					}
-				})
-				// .on("click", function(e) { //For mobile
-				// 	d3.select("#hover")
-				// 		.classed("hidden", false);
-				// });
+				// .on("mouseout", function(e) {
+				// 	if (!clicked) {
+				// 		d3.select("#hover")
+				// 			.classed("hidden", true);
+				// 	}
+				// })
+				.on("click", function(e) { //For mobile
+					show_tooltip(e);
+					// d3.select("#hover")
+					// 	.classed("hidden", false);
+				});
 			
 			// Put our dots in the right place and make sure that they move when our map pans or zooms
 			change(dots);
