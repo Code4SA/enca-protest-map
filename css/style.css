@@ -31,14 +31,10 @@ circle {
   height: 600px;
 }
 #visible_date {
-  position: absolute;
   margin-top: 10px;
   z-index: 999;
-  margin-left: 30px;
   background-color: rgba(255, 255, 255, 0.6);
-  border-top: 1px #CCC solid;
-  border-right: 1px #CCC solid;
-  border-bottom: 1px #CCC solid;
+  border: 1px #CCC solid;
   padding: 10px;
   color: #444;
   font-size: 14pt;
@@ -56,7 +52,7 @@ circle {
   display: none;
 }
 #scrubber {
-  position: absolute;
+  position: relative;
   margin-top: 0px;
   z-index: 500;
   font-size: 8pt;
@@ -70,7 +66,6 @@ circle {
 #header {
   background-color: #FFF;
   min-height: 80px;
-  border-bottom: 1px #CCC solid;
   z-index: 400;
   padding-bottom: 10px;
 }

@@ -320,7 +320,7 @@ function initialize() {
 			.transition()
 			.duration(100)
 			.ease("bounce")
-			.attr('r', map._zoom)
+			.attr('r', 1.5 * map._zoom)
 		;
 
 		update_url();
