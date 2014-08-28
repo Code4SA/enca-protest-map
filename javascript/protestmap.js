@@ -78,7 +78,7 @@ function initialize() {
 
 	$.each(window.location.hash.replace("#", "").split("&"), function(i, d) {
 		var parts = d.split("=");
-		settings[parts[0]] = parts[1];
+		settings[parts[0]] = decodeURIComponent(parts[1]);
 	});;
 
 	//Check for embedding
@@ -236,7 +236,7 @@ function initialize() {
 		var zoom = map._zoom;
 		var bounds = map.getBounds();
 		var center = map.getCenter();
-		window.location.hash = "#zoom=" + zoom + "&ne_lat=" + bounds._northEast.lat + "&ne_lng=" +  bounds._northEast.lng + "&sw_lat=" + bounds._southWest.lat + "&sw_lng=" +  bounds._southWest.lng + "&type_id=" + $("#protest_types option:selected").val() + "&brush_start=" + brush.extent()[0] + "&brush_end=" + brush.extent()[1] + "&center_lat=" + center.lat + "&center_lng=" + center.lng;
+		window.location.hash = "#zoom=" + zoom + "&ne_lat=" + bounds._northEast.lat + "&ne_lng=" +  bounds._northEast.lng + "&sw_lat=" + bounds._southWest.lat + "&sw_lng=" +  bounds._southWest.lng + "&type_id=" + $("#protest_types option:selected").val() + "&brush_start=" + encodeURIComponent(dateRange.val()[0]) + "&brush_end=" + encodeURIComponent(dateRange.val()[1]) + "&center_lat=" + center.lat + "&center_lng=" + center.lng;
 		$("#embed_code").val("<iframe src='" + window.location + "&embed=1' width='600' height='800'></iframe>");
 	}
 
