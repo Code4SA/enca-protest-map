@@ -31,8 +31,22 @@
 			<div id="map_outer">
 				
 				<div id="visible_date"></div>
-				<div id="toolbar">
-					<div id="protest_types"></div>
+				<div id="dates" class="clearfix">
+					<div class="col-sm-4">
+						<h5>Start Date</h5>
+						<select name="" id="start_date" class="form-control"></select>
+					</div>
+					<div class="col-sm-4">
+						<h5>End Date</h5>
+						<select name="" id="end_date" class="form-control"></select>
+					</div>
+					<div class="col-sm-4">
+						<h5>Type</h5>
+						<div id="protest_types"></div>
+					</div>	
+				</div>
+				
+				<div id="map">
 					<div id="keys">
 						<div class="key">
 							<div class="color-dot red"></div>
@@ -43,14 +57,8 @@
 							Peaceful
 						</div>
 					</div>
-					<div id="dates">
-						<h5>Start Date</h5>
-						<select name="" id="start_date" class="form-control"></select>
-						<h5>End Date</h5>
-						<select name="" id="end_date" class="form-control"></select>
-					</div>
 				</div>
-				<div id="map"></div>
+
 				<div id="scrubber"></div>
 			</div>
 

@@ -47,11 +47,16 @@ svg , g
 	z-index: 999;
 	// left: 50px;
 	// margin-left: 30px;
-	background-color: rgba(255,255,255, 0.6);
+	// background-color: rgba(255,255,255, 0.6);
 	border: 1px #CCC solid;
 	padding: 10px;
 	color: #444;
 	font-size: 14pt;
+}
+
+#dates {
+	border: 1px #CCC solid;
+	border-top: none;
 }
 
 .bar rect {
@@ -157,22 +162,25 @@ svg , g
 	overflow: hidden;
 }
 
-#toolbar {
+#keys {
 	position: absolute;
 	z-index: 470;
 	margin-top: 10px;
 	right: 20px;
 	background-color: rgba(255,255,255,0.8);
 	border: 1px #CCC solid;
-	padding: 10px;
+	padding: 4px;
+	width: 110px;
 
-	#keys {
 		margin: 10px 0px;
 		.color-dot {
 			width: 15px;
 			height: 15px;
 			float: left;
 			margin-right: 10px;
+			-webkit-border-radius: 12px;
+			-moz-border-radius: 12px;
+			border-radius: 12px;
 		}
 
 		.red {
@@ -182,5 +190,5 @@ svg , g
 		.blue {
 			background-color: steelblue;
 		}
-	}
+	
 }

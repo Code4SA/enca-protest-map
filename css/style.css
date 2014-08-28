@@ -33,11 +33,14 @@ circle {
 #visible_date {
   margin-top: 10px;
   z-index: 999;
-  background-color: rgba(255, 255, 255, 0.6);
   border: 1px #CCC solid;
   padding: 10px;
   color: #444;
   font-size: 14pt;
+}
+#dates {
+  border: 1px #CCC solid;
+  border-top: none;
 }
 .bar rect {
   fill: steelblue;
@@ -110,27 +113,29 @@ circle {
 .embedded #embed_code_container {
   display: none;
 }
-#toolbar {
+#keys {
   position: absolute;
   z-index: 470;
   margin-top: 10px;
   right: 20px;
   background-color: rgba(255, 255, 255, 0.8);
   border: 1px #CCC solid;
-  padding: 10px;
-}
-#toolbar #keys {
+  padding: 4px;
+  width: 110px;
   margin: 10px 0px;
 }
-#toolbar #keys .color-dot {
+#keys .color-dot {
   width: 15px;
   height: 15px;
   float: left;
   margin-right: 10px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
 }
-#toolbar #keys .red {
+#keys .red {
   background-color: #cf1a1f;
 }
-#toolbar #keys .blue {
+#keys .blue {
   background-color: steelblue;
 }
