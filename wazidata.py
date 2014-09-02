@@ -62,7 +62,8 @@ def reduce_data(wazi, headerfields):
 					newkey = col + "." + key
 					newval = row[col][key]
 					newrow[newkey] = newval
-					headerfields.append(newkey)
+					if not newkey in headerfields:
+						headerfields.append(newkey)
 			else:
 				newrow[col] = row[col]
 		reduced.append(newrow)
