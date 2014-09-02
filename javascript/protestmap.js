@@ -495,17 +495,58 @@ map.on('click', onMapClick);
 	// 	});
 	// }
 
+	function get_stats(data, statname) {
+		var total = 0;
+		var result = {};
+		$.each(data, function(k, i) {
+			if (k.indexOf(statname) == 0) {
+				if (k == statname + "_total") {
+					total = i;
+				} else {
+					var key = k.substr(statname.length + 1);
+					result[key] = parseInt(i);
+				}
+				// console.log(k, i);
+			}
+		});
+		return result;
+	}
+
+	function capitaliseFirstLetter(string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+
+	function get_top_percent(data) {
+		var high = 0;
+		var high_key = "";
+		var sum = 0;
+		$.each(data, function(k, i) {
+			sum = sum + i;
+			if (high < i) {
+				high = i;
+				high_key = k;
+			}
+		});
+		high_key = high_key.replace(/_/g, " ");
+		return { val: high, percentage: (high / sum), key: high_key };
+	}
+
 	function show_tooltip(sender) {
 		// console.log(sender);
 		var issid = sender.ISSID;
 
-		$.getJSON("https://code4sa.demo.socrata.com/resource/7y3u-atvk.json?ISSID=" + issid, function(d) {
+		$.getJSON("https://code4sa.demo.socrata.com/resource/i7j9-h2db.json?ISSID=" + issid, function(d) {
 			d = d.pop();
+			
+			toilets_top = get_top_percent(get_stats(d, "toilets"));
+			water = get_top_percent(get_stats(d, "water"));
+			// electricity = get_top_percent(get_stats(d, "electricity"));
+
 			var sdate = dateformat(new Date(d.start_date));
 			if (d.start_date != d.end_date) {
 				sdate = sdate + " to " + dateformat(new Date(d.end_date));
 			}
-			popup.setContent("<strong>" + d.violent_or_violent + " " + d.type.toLowerCase() + " protest at " + d.suburbareaplacename + ", " + d.towncity_name + " on " + sdate + "</strong>\n<p>" + d.reasonforprotest + "</p>");
+			popup.setContent("<strong>" + d.violent_or_non_violent + " " + d.type.toLowerCase() + " protest at " + d.suburbareaplacename + ", " + d.towncity_name + " on " + sdate + "</strong>\n<p>" + d.reasonforprotest + "</p><p><ul><li>" + Math.round(toilets_top.percentage * 100) + "% have " + toilets_top.key + "</li><li>" + Math.round(water.percentage * 100) + "% have " + water.key + "</li></p><p><strong><a href='http://wazimap.co.za/profiles/ward-" + d.ward + "' target='_blank'>More stats on Wazimap</a></strong></p>");
 			popup.openOn(map);
 		});
 	}
