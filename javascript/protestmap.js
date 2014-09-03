@@ -75,11 +75,18 @@ function initialize() {
 	settings.brush_start = false;
 	settings.brush_end = false;
 	settings.embed = false;
+	settings.lock = false;
 
 	$.each(window.location.hash.replace("#", "").split("&"), function(i, d) {
 		var parts = d.split("=");
 		settings[parts[0]] = decodeURIComponent(parts[1]);
 	});;
+
+	if (settings.lock == "true") {
+		settings.lock = true;
+	} else {
+		settings.lock = false;
+	}
 
 	//Check for embedding
 	if (settings.embed) {
@@ -168,10 +175,20 @@ function initialize() {
 	// Stamen_TerrainLabels.addTo(map);
 
 	//Don't scroll away from South Africa
-	map.setMaxBounds([
-		[-15.5, 46],
-		[-39, 10.5]
-	]);
+	if (!settings.lock) {
+		map.setMaxBounds([
+			[-5, 46],
+			[-39, 10.5]
+		]);
+	} else {
+		map.dragging = false;
+		map.setMaxBounds(
+			map.getBounds()
+		);
+		// While we're here, make sure we can't change anything because we're on lockdown
+		$("#dates").hide();
+		$(".leaflet-control-zoom").hide();
+	}
 
 	//Do some important map business
     map._initPathRoot();
@@ -186,6 +203,8 @@ function initialize() {
 	map.on("moveend", function(e) {
 		update_url();
 	});
+
+	$("#chk_lock").on("click", update_url);
 	
 	// Attach our map to our page
 	var svg = d3.select("#map").select("svg");
@@ -237,7 +256,7 @@ function initialize() {
 		var bounds = map.getBounds();
 		var center = map.getCenter();
 		window.location.hash = "#zoom=" + zoom + "&ne_lat=" + bounds._northEast.lat + "&ne_lng=" +  bounds._northEast.lng + "&sw_lat=" + bounds._southWest.lat + "&sw_lng=" +  bounds._southWest.lng + "&type_id=" + $("#protest_types option:selected").val() + "&brush_start=" + encodeURIComponent(dateRange.val()[0]) + "&brush_end=" + encodeURIComponent(dateRange.val()[1]) + "&center_lat=" + center.lat + "&center_lng=" + center.lng;
-		$("#embed_code").val("<iframe src='" + window.location + "&embed=1' width='600' height='800'></iframe>");
+		$("#embed_code").val("<iframe src='" + window.location + "&embed=1&lock=" + $("#chk_lock").is(':checked') + "' width='800' height='960' style='border: none'></iframe>");
 	}
 
 	function change(dots) {
@@ -729,10 +748,11 @@ map.on('click', onMapClick);
 				function() {
 					brush.extent([new Date(dateRange.val()[0]), new Date(dateRange.val()[1])]);
 					brush(brushsvg);
-					// console.log("Set brush extent", brush.extent());
 				},
 				function() {
-					dateRange.update("brush", new Date(brush.extent()[0]), new Date(brush.extent()[1]));
+					if (!settings.lock) {
+						dateRange.update("brush", new Date(brush.extent()[0]), new Date(brush.extent()[1]));
+					}
 				}
 			);
 			
